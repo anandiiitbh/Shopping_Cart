@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
+import myObjt from "./myObj";
 import { reactLocalStorage } from "reactjs-localstorage";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -35,110 +36,40 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App() {
   const classes = useStyles();
-  let myObj = [
-    {
-      id: 9090,
-      name: "Item1",
-      price: 200,
-      discount: 10,
-      type: "fiction",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9091,
-      name: "Item2",
-      price: 250,
-      discount: 15,
-      type: "literature",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9092,
-      name: "Item3",
-      price: 320,
-      discount: 5,
-      type: "literature",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9093,
-      name: "Item4",
-      price: 290,
-      discount: 0,
-      type: "thriller",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9094,
-      name: "Item5",
-      price: 500,
-      discount: 25,
-      type: "thriller",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9095,
-      name: "Item6",
-      price: 150,
-      discount: 5,
-      type: "literature",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9096,
-      name: "Item7",
-      price: 700,
-      discount: 22,
-      type: "literature",
-      img_url: "https://place-hold.it/40.jpg"
-    },
-    {
-      id: 9097,
-      name: "Item8",
-      price: 350,
-      discount: 18,
-      type: "fiction",
-      img_url: "https://place-hold.it/40.jpg"
-    }
-  ];
-
-  const [itemArr, setItemArr] = useState(getItems()[0]);
-  const [calculations, setCalculations] = useState(getItems()[1]);
-  const [noOfItems, setnoOfItems] = useState(calculations[0]);
-  const [cost, setCost] = useState(calculations[1]);
-  const [disc, setdisc] = useState(calculations[2]);
-  const [tDisc, setTDisc] = useState(calculations[3]);
-  const [total, setTotal] = useState(calculations[4]);
+  let myObj = myObjt.map(Object.values);
+  const [itemArr, setItemArr] = useState(getItems(myObj)[0]);
+  const [cost, setCost] = useState(getItems(myObj)[1][0]);
+  const [disc, setDisc] = useState(getItems(myObj)[1][1]);
+  const [tDisc, setTDisc] = useState(getItems(myObj)[1][2]);
+  const [total, setTotal] = useState(getItems(myObj)[1][3]);
+  // // setCart();
   function Update(step, id) {
-    let itemId = id;
     if (step === 1) {
       //Delete
       let temp = itemArr;
-      temp.splice(itemId, 1);
+      temp.splice(id, 1);
       store(temp);
-      setItemArr(getItems()[0]);
+      setItemArr(getItems(myObj)[0]);
     } else if (step === 2) {
       //plus item
-      itemArr[itemId][6] += 1;
-      document.getElementById(itemId).innerHTML = itemArr[itemId][6];
+      itemArr[id][6] += 1;
+      document.getElementById(id).innerHTML = itemArr[id][6];
       setItemArr(itemArr);
       store(itemArr);
     } else {
       //minus item
-      if (step === 3 && itemArr[itemId][6] > 1) {
-        itemArr[itemId][6] -= 1;
-        document.getElementById(itemId).innerHTML = itemArr[itemId][6];
+      if (step === 3 && itemArr[id][6] > 1) {
+        itemArr[id][6] -= 1;
+        document.getElementById(id).innerHTML = itemArr[id][6];
         setItemArr(itemArr);
         store(itemArr);
       }
     }
-    let calc = getItems()[1];
-    setCalculations(calc);
-    setnoOfItems(calc[0]);
-    setCost(calc[1]);
-    setdisc(calc[2]);
-    setTDisc(calc[3]);
-    setTotal(calc[4]);
+    setItemArr(getItems(myObj)[0]);
+    setCost(getItems(myObj)[1][0]);
+    setDisc(getItems(myObj)[1][1]);
+    setTDisc(getItems(myObj)[1][2]);
+    setTotal(getItems(myObj)[1][3]);
   }
 
   return (
@@ -148,7 +79,9 @@ export default function App() {
           <br />
           <hr />
           <div style={{ float: "left", width: "61%" }}>
-            <i style={{ float: "left", marginLeft: 8 }}> Items (7)</i>
+            <i style={{ float: "left", marginLeft: 8 }}>
+              Items ( {itemArr.length} )
+            </i>
           </div>
           <i style={{ float: "left", marginLeft: "35px" }}> Qty</i>
           <i style={{ float: "right", width: "12%" }}> Price</i>
@@ -159,7 +92,7 @@ export default function App() {
           ) : (
             <button
               onClick={() => {
-                setItemArr(reset(myObj));
+                reset(myObj);
                 Update(0, -1);
               }}
             >
@@ -167,8 +100,7 @@ export default function App() {
             </button>
           )}
           {itemArr.map((number, index) => (
-            <div style={{ marginBottom: "10px" }} key={index}>
-              {/* {console.log(number[0], " ", number[6])} */}
+            <div style={{ marginBottom: "10px" }} key={number[0]}>
               <Card className={classes.card}>
                 <Avatar
                   className={classes.avatar}
@@ -254,7 +186,7 @@ export default function App() {
                 margin: "15px 0px"
               }}
             >
-              <h4 id="noi">Items ( {noOfItems} )</h4>
+              <h4>Items ( {itemArr.length} )</h4>
               <h4>:</h4>
               <h4>$ {cost}</h4>
             </div>
@@ -292,7 +224,7 @@ export default function App() {
               }}
             >
               <h4>Order total</h4>
-              <h4>$ {total}</h4>
+              <h4>- $ {total}</h4>
             </div>
           </div>
         </div>
@@ -305,17 +237,16 @@ function reset(myObj) {
   let temp = [];
   for (let i = 0; i < myObj.length; i++) {
     temp.push([
-      myObj[i].id,
-      myObj[i].name,
-      myObj[i].price,
-      myObj[i].discount,
-      myObj[i].type,
-      myObj[i].img_url,
+      myObj[i][0],
+      myObj[i][1],
+      myObj[i][2],
+      myObj[i][3],
+      myObj[i][4],
+      myObj[i][5],
       1
     ]);
   }
-
-  return store(temp);
+  store(temp);
 }
 
 function store(myObj) {
@@ -329,18 +260,17 @@ function store(myObj) {
     reactLocalStorage.setObject("img_url" + i, myObj[i][5]);
     reactLocalStorage.setObject("qty" + i, myObj[i][6]);
   }
-  return myObj;
 }
 
-function getItems() {
+function getItems(myObj) {
   let tempArr = [];
-  let len = reactLocalStorage.getObject("len");
+  let len = Number(reactLocalStorage.getObject("len"));
   let cost = 0,
     disc = 0,
     tDisc = 0,
     total = 0;
-  if (Number(len) > 0) {
-    for (let i = 0; i < Number(len); i++) {
+  if (len > 0) {
+    for (let i = 0; i < len; i++) {
       let id = Number(reactLocalStorage.getObject("id" + i)),
         name = reactLocalStorage.getObject("name" + i),
         price = reactLocalStorage.getObject("price" + i),
@@ -357,6 +287,10 @@ function getItems() {
 
       tempArr.push([id, name, price, discount, type, img, qty]);
     }
+  } else {
+    if (len !== 0) {
+      reset(myObj);
+    }
   }
-  return [tempArr, [len, cost, disc, tDisc, total]];
+  return [tempArr, [cost, disc, tDisc, total]];
 }
