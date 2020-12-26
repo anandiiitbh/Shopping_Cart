@@ -34,7 +34,7 @@ h4 {
     transform: translateX(-50%);
     margin-top: 10px;
     width: 300px;
-    position: fixed;
+    position: absolute;
   }
 }
 
