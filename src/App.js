@@ -12,8 +12,13 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PlusOneIcon from "@material-ui/icons/PlusOne";
 import RemoveIcon from "@material-ui/icons/Remove";
+import Button from "@material-ui/core/Button";
+import RotateLeftIcon from "@material-ui/icons/RotateLeft";
 
 const useStyles = makeStyles((theme) => ({
+  button: {
+    margin: theme.spacing(1)
+  },
   card: {
     float: "left",
     width: "60%",
@@ -94,14 +99,18 @@ export default function App() {
           {itemArr.length ? (
             ""
           ) : (
-            <button
+            <Button
+              variant="contained"
+              color="default"
+              className={classes.button}
+              startIcon={<RotateLeftIcon />}
               onClick={() => {
                 reset(myObj);
                 Update(0, -1);
               }}
             >
               Reset
-            </button>
+            </Button>
           )}
           {itemArr.map((number, index) => (
             <div style={{ marginBottom: "10px" }} key={number[0]}>
