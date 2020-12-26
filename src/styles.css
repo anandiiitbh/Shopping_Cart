@@ -30,7 +30,7 @@ h4 {
   }
 
   .Bill {
-    margin-left: calc(50%);
+    margin-left: calc(45%);
     transform: translateX(-50%);
     margin-top: 10px;
     width: 300px;
@@ -46,11 +46,18 @@ h4 {
   }
   .Bill {
     width: 300px;
-    margin: 70px 50px;
+    margin-top: 70px;
+    margin-left: 3px;
     float: left;
   }
 
   .container {
     display: flex;
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .Bill {
+    margin-left: 20px;
   }
 }
