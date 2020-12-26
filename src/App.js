@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
+import swal from "sweetalert";
 import myObjt from "./myObj";
 import { reactLocalStorage } from "reactjs-localstorage";
 import Typography from "@material-ui/core/Typography";
@@ -42,11 +43,13 @@ export default function App() {
   const [disc, setDisc] = useState(getItems(myObj)[1][1]);
   const [tDisc, setTDisc] = useState(getItems(myObj)[1][2]);
   const [total, setTotal] = useState(getItems(myObj)[1][3]);
-  // // setCart();
+  const [noOfItems, setNoOfItems] = useState(getItems(myObj)[1][4]);
+
   function Update(step, id) {
     if (step === 1) {
       //Delete
       let temp = itemArr;
+      swal(temp[id][1] + " !", "Item has been deleted!", "error");
       temp.splice(id, 1);
       store(temp);
       setItemArr(getItems(myObj)[0]);
@@ -70,6 +73,7 @@ export default function App() {
     setDisc(getItems(myObj)[1][1]);
     setTDisc(getItems(myObj)[1][2]);
     setTotal(getItems(myObj)[1][3]);
+    setNoOfItems(getItems(myObj)[1][4]);
   }
 
   return (
@@ -186,7 +190,7 @@ export default function App() {
                 margin: "15px 0px"
               }}
             >
-              <h4>Items ( {itemArr.length} )</h4>
+              <h4>Items ( {noOfItems} )</h4>
               <h4>:</h4>
               <h4>$ {cost}</h4>
             </div>
@@ -268,7 +272,8 @@ function getItems(myObj) {
   let cost = 0,
     disc = 0,
     tDisc = 0,
-    total = 0;
+    total = 0,
+    noOfItems = 0;
   if (len > 0) {
     for (let i = 0; i < len; i++) {
       let id = Number(reactLocalStorage.getObject("id" + i)),
@@ -280,6 +285,7 @@ function getItems(myObj) {
         qty = reactLocalStorage.getObject("qty" + i);
 
       cost += qty * price;
+      noOfItems += qty;
       disc += (discount / 100) * (qty * price);
       tDisc += type === "fiction" ? qty * price * 0.15 : 0;
       total = cost - (disc + tDisc);
@@ -292,5 +298,5 @@ function getItems(myObj) {
       reset(myObj);
     }
   }
-  return [tempArr, [cost, disc, tDisc, total]];
+  return [tempArr, [cost, disc, tDisc, total, noOfItems]];
 }
