@@ -43,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
   const classes = useStyles();
   let myObj = myObjt.map(Object.values);
-  const [itemArr, setItemArr] = useState(getItems(myObj)[0]);
+  let initial_elem = getItems(myObj)[0];
+  const [itemArr, setItemArr] = useState(initial_elem);
   const [cost, setCost] = useState(getItems(myObj)[1][0]);
   const [disc, setDisc] = useState(getItems(myObj)[1][1]);
   const [tDisc, setTDisc] = useState(getItems(myObj)[1][2]);
@@ -305,6 +306,7 @@ function getItems(myObj) {
   } else {
     if (len !== 0) {
       reset(myObj);
+      return getItems(myObj);
     }
   }
   return [tempArr, [cost, disc, tDisc, total, noOfItems]];
