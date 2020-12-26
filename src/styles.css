@@ -47,10 +47,8 @@ h4 {
   .Bill {
     width: 300px;
     margin-top: 70px;
-    margin-left: 3px;
     float: left;
   }
-
   .container {
     display: flex;
   }
