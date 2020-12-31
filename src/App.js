@@ -238,7 +238,7 @@ export default function App() {
               }}
             >
               <h4>Order total</h4>
-              <h4>- $ {total}</h4>
+              <h4> $ {total}</h4>
             </div>
           </div>
         </div>
